@@ -28,6 +28,30 @@
   color: #61dafb;
 }
 
+.table-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.flex {
+  display: flex;
+}
+
+.points-total {
+  margin-left: 5px;
+}
+
+.app-button {
+  width: 150px;
+  background-color: transparent;
+  height: 80px;
+  color: white;
+  font-size: 20px;
+  border-color: white;
+  border-style: solid;
+  border-radius: 10px;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
