@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
-import { testData } from './TestData/testTransactions'
+import { testData } from './TestData/testTransactions';
+import moment from 'moment';
 import './App.css';
 
 function App() {
@@ -13,7 +14,7 @@ function App() {
   
  const fakeApi = () => {
     let timeout = randomIntFromInterval(1000, 2000)
-    console.log(timeout)
+
     setIsLoading(true)
     return new Promise(resolve => {
       setTimeout(() => resolve(testData), timeout);
@@ -22,6 +23,7 @@ function App() {
 
   const callApi = async () => {
     const newText = await fakeApi();
+  
     setCustomerData(newText)
     setIsLoading(false)
   };
@@ -47,14 +49,19 @@ function App() {
     }
   }
 
+  console.log(memoizedResults)
   const makeCustomerTable = (obj) => {
     if(obj){
       return(
         Object.entries(obj).map((item) => {
           return(
+            
             <div className='table-row' key={item[0]}>
-              <div className='flex'>{`${item[1].customerName} : `}</div>
-              <div className='flex points-total'>{Math.floor(item[1].pointsForPurchace)}</div>
+              <div className='flex-one centered small-font'>{`${item[1].customerName}`}</div>
+              <div className='flex-one centered small-font'>{Math.floor(item[1].pointsForPurchace)}</div>
+              <div className='flex-one centered small-font'>{item[1].pointsThisMonth}</div>
+              <div className='flex-one centered small-font'>{item[1].pointsLastMonth}</div>
+              <div className='flex-one centered small-font'>{item[1].pointsTwoMonthsAgo}</div>
             </div>
           )
         })
@@ -62,18 +69,40 @@ function App() {
     }
   }
 
+  const makeTableHeader = () => {
+    const currentMonthName  = moment().format('MMMM');
+    const lastMonthName = moment().startOf('month').subtract(1, 'months').format('MMMM');
+    const twoMonthAgoName = moment().startOf('month').subtract(2, 'months').format('MMMM');
+
+    return(
+      <div className='table-row'>
+        <div className='flex-one centered'>Customer</div>
+        <div className='flex-one centered'>Points Total</div>
+        <div className='flex-one centered'>{`${currentMonthName} points`}</div>
+        <div className='flex-one centered'>{`${lastMonthName} points`}</div>
+        <div className='flex-one centered'>{`${twoMonthAgoName} points`}</div>
+      </div>
+    )
+  }
+
   return (
-    <div className="App">
+    <div className="App-container">
       <header className="App-header">
-        {returnLoadButton()}
-        {returnLoadingIndicator()}
-        {makeCustomerTable(memoizedResults)}
+        
+          {makeTableHeader()}
+          {makeCustomerTable(memoizedResults)}
+          {returnLoadButton()}
+          {returnLoadingIndicator()}
+        
       </header>
     </div>
   );
 }
 
 const returnCustomerMap = (array) => {
+  //object map = {key: {pointsTotal: number, customerName: string, pointsThisMonth: number, pointsLastMonth: number, points2lastMonth: number}}
+
+  let returnMap = {}
 
   const calculatePointsForPurchace = (total) => {
     const roundedTotal = Math.floor(total)
@@ -89,16 +118,53 @@ const returnCustomerMap = (array) => {
     }
   }
 
-  let returnMap = {}
+  const calculatePointsByMonth = (time, key, isNew, purchaceValue) =>{
+    const startOfThisMonth = moment().startOf('month').unix();
+    const startOfLastMonth = moment().startOf('month').subtract(1, 'months').unix();
+    const startOfTwoMonthAgo = moment().startOf('month').subtract(2, 'months').unix();
+
+    if(time > startOfThisMonth){
+      if(isNew){
+        returnMap[key].pointsThisMonth = Math.floor(calculatePointsForPurchace(purchaceValue))
+        returnMap[key].pointsLastMonth = 0;
+        returnMap[key].pointsTwoMonthsAgo = 0;
+      }else{
+        let prevTotal = returnMap[key].pointsThisMonth || 0
+        returnMap[key].pointsThisMonth = Math.floor(prevTotal + calculatePointsForPurchace(purchaceValue))
+      }
+    }else if(time > startOfLastMonth && time < startOfThisMonth){
+      if(isNew){
+        returnMap[key].pointsLastMonth = Math.floor(calculatePointsForPurchace(purchaceValue))
+        returnMap[key].pointsThisMonth = 0;
+        returnMap[key].pointsTwoMonthsAgo = 0;
+      }else{
+        let prevTotal = returnMap[key].pointsLastMonth || 0
+        returnMap[key].pointsLastMonth = Math.floor(prevTotal + calculatePointsForPurchace(purchaceValue))
+      }
+    }else if(time > startOfTwoMonthAgo && time < startOfLastMonth){
+      if(isNew){
+        returnMap[key].pointsTwoMonthsAgo = Math.floor(calculatePointsForPurchace(purchaceValue))
+        returnMap[key].pointsThisMonth = 0;
+        returnMap[key].pointsLastMonthsAgo = 0;
+      }else{
+        let prevTotal = returnMap[key].pointsTwoMonthsAgo || 0
+        returnMap[key].pointsTwoMonthsAgo = Math.floor(prevTotal + calculatePointsForPurchace(purchaceValue))
+      }
+    }else{
+
+    }
+  }
 
   if(array.length > 0) {
     array.forEach(object => {
-      let pointsForPurchace = calculatePointsForPurchace(object.purchaceTotal)
+      let pointsForPurchace = Math.floor(calculatePointsForPurchace(object.purchaceTotal))
       if(!returnMap.hasOwnProperty(object.customerId)){
         returnMap[object.customerId] = {pointsForPurchace: pointsForPurchace, customerName: object.customerName};
+        calculatePointsByMonth(object.transactionTime, object.customerId, true, object.purchaceTotal)
       }else{
         let prevTotal = Math.floor(returnMap[object.customerId].pointsForPurchace)
         returnMap[object.customerId].pointsForPurchace =  Math.floor(prevTotal + pointsForPurchace)
+        calculatePointsByMonth(object.transactionTime, object.customerId, false, object.purchaceTotal)
       }
     })
   }

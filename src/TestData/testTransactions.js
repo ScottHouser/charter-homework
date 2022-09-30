@@ -15,6 +15,20 @@ export const testData = [ //contains two customers
       },
       {
         customerName:'Scott Houser',
+        transactionId:'11201363-4976-433a-af44-e3e6856d8b09',
+        customerId:'21917390-2fbb-46b0-abf1-019912c9dd38',
+        transactionTime: 1661853342,
+        purchaceTotal: 180.09
+      },
+      {
+        customerName:'Scott Houser',
+        transactionId:'11201363-4976-433a-af44-e3e6856d8b09',
+        customerId:'21917390-2fbb-46b0-abf1-019912c9dd38',
+        transactionTime: 1659174942,
+        purchaceTotal: 308.09
+      },
+      {
+        customerName:'Scott Houser',
         transactionId:'ec455a07-6a5a-4b88-a860-5c7213e161f3',
         customerId:'21917390-2fbb-46b0-abf1-019912c9dd38',
         transactionTime: 1664365041,
@@ -89,5 +103,26 @@ export const testData = [ //contains two customers
         customerId:'d145597d-d395-47c2-ab81-1b3139d21021',
         transactionTime: 1663846641,
         purchaceTotal: 1.09
+      },
+      {
+        customerName:'George ThreeMonth',
+        transactionId:'f932d533-74a1-44da-96d9-34a5d0abeb04',
+        customerId:'06159196-e040-4229-9a69-a660c7e72cfc',
+        transactionTime: 	1664531742,
+        purchaceTotal: 100.09
+      },
+      {
+        customerName:'George ThreeMonth',
+        transactionId:'8f64cb85-cdc6-428f-884a-60c2779be358',
+        customerId:'06159196-e040-4229-9a69-a660c7e72cfc',
+        transactionTime: 1661853342,
+        purchaceTotal: 100.09
+      },
+      {
+        customerName:'George ThreeMonth',
+        transactionId:'303eb461-c1cd-4df0-b3f0-8d7a3d25015a',
+        customerId:'06159196-e040-4229-9a69-a660c7e72cfc',
+        transactionTime: 1659174942,
+        purchaceTotal: 100.09
       },
 ]
