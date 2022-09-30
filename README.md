@@ -10,6 +10,10 @@ The data is sorted into an object that acts as a map using individual unique cus
 This app makes use of the React `useMemo` hook to memoize data and improve scalability
 
 
+https://user-images.githubusercontent.com/20464795/193189299-4b42deea-450d-4168-a4e2-fa0e0c63e537.mov
+
+
+
 ## Available Scripts
 
 In the project directory, you can run:
