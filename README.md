@@ -1,7 +1,13 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## 
+## App Summary
+
+This app uses an async await call with a setTimeout to simulate a server call to retrieve purchace data
+
+The data is sorted into an object that acts as a map using individual unique customer Id's as keys. Points per month are calculated by comparing unix time stamps. 
+
+This app makes use of the React `useMemo` hook to memoize data and improve scalability
 
 
 ## Available Scripts
@@ -16,10 +22,6 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 The page will reload when you make changes.\
 You may also see any lint errors in the console.
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
 
 

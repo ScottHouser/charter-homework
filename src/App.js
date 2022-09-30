@@ -76,8 +76,8 @@ function App() {
 
     return(
       <div className='table-row'>
-        <div className='flex-one centered'>Customer</div>
-        <div className='flex-one centered'>Points Total</div>
+        <div className='flex-one centered'>{`Customer`}</div>
+        <div className='flex-one centered'>{`Points Total`}</div>
         <div className='flex-one centered'>{`${currentMonthName} points`}</div>
         <div className='flex-one centered'>{`${lastMonthName} points`}</div>
         <div className='flex-one centered'>{`${twoMonthAgoName} points`}</div>
