@@ -49,7 +49,6 @@ function App() {
     }
   }
 
-  console.log(memoizedResults)
   const makeCustomerTable = (obj) => {
     if(obj){
       return(
@@ -150,8 +149,6 @@ const returnCustomerMap = (array) => {
         let prevTotal = returnMap[key].pointsTwoMonthsAgo || 0
         returnMap[key].pointsTwoMonthsAgo = Math.floor(prevTotal + calculatePointsForPurchace(purchaceValue))
       }
-    }else{
-
     }
   }
 
