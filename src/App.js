@@ -36,6 +36,11 @@ function App() {
     }
   }
 
+  const consoleLogBullshit = () => {
+
+    console.log('sadf')
+  }
+
   const returnLoadButton = () => {
     if(!isLoading && customerData.length < 1){
       return(
@@ -87,6 +92,7 @@ function App() {
   return (
     <div className="App-container">
       <header className="App-header">
+        {consoleLogBullshit()}
         
           {makeTableHeader()}
           {makeCustomerTable(memoizedResults)}
@@ -102,6 +108,9 @@ const returnCustomerMap = (array) => {
   //object map = {key: {pointsTotal: number, customerName: string, pointsThisMonth: number, pointsLastMonth: number, points2lastMonth: number}}
 
   let returnMap = {}
+  const startOfThisMonth = moment().startOf('month').unix();
+  const startOfLastMonth = moment().startOf('month').subtract(1, 'months').unix();
+  const startOfTwoMonthAgo = moment().startOf('month').subtract(2, 'months').unix();
 
   const calculatePointsForPurchace = (total) => {
     const roundedTotal = Math.floor(total)
@@ -118,9 +127,6 @@ const returnCustomerMap = (array) => {
   }
 
   const calculatePointsByMonth = (time, key, isNew, purchaceValue) =>{
-    const startOfThisMonth = moment().startOf('month').unix();
-    const startOfLastMonth = moment().startOf('month').subtract(1, 'months').unix();
-    const startOfTwoMonthAgo = moment().startOf('month').subtract(2, 'months').unix();
 
     if(time > startOfThisMonth){
       if(isNew){
@@ -153,8 +159,12 @@ const returnCustomerMap = (array) => {
   }
 
   if(array.length > 0) {
+
     array.forEach(object => {
       let pointsForPurchace = Math.floor(calculatePointsForPurchace(object.purchaceTotal))
+      if( object.transactionTime < startOfTwoMonthAgo ){
+        pointsForPurchace = 0
+      }
       if(!returnMap.hasOwnProperty(object.customerId)){
         returnMap[object.customerId] = {pointsForPurchace: pointsForPurchace, customerName: object.customerName};
         calculatePointsByMonth(object.transactionTime, object.customerId, true, object.purchaceTotal)
