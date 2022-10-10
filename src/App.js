@@ -36,11 +36,6 @@ function App() {
     }
   }
 
-  const consoleLogBullshit = () => {
-
-    console.log('sadf')
-  }
-
   const returnLoadButton = () => {
     if(!isLoading && customerData.length < 1){
       return(
